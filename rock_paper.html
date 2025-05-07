@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <title>RPS</title>
+</head>
+
+<body class="bg-gray-300 min-h-screen flex flex-col items-center justify-center">
+
+  <h1 class="text-center font-mono text-5xl mb-10">Rock Paper Scissors</h1>
+  
+  <div class="mb-6 text-2xl font-mono">
+    Score: <span id="score">0</span>
+    <button id="reset" class="ml-4 bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-sm">
+      Reset Score
+    </button>
+  </div>
+
+  <div class="mb-6 font-mono flex flex-col items-center sm:flex-col md:flex-col lg:flex-row gap-2 text-lg text-center">
+    <div>✅ Wins: <span id="win">0</span></div>
+    <div>❌ Losses: <span id="lose">0</span></div>
+    <div>🤝 Ties: <span id="tie">0</span></div>
+  </div>
+  
+  <div class="w-full max-w-screen-lg px-10 flex justify-between">
+    <button class="choice bg-white px-6 py-3 rounded-xl shadow-md hover:bg-gray-100" data-choice="Rock" ><img src="./stone.png" alt=""class="w-12 h-12 mx-auto"></button>
+    <button class="choice bg-white px-6 py-3 rounded-xl shadow-md hover:bg-gray-100" data-choice="Paper"><img src="./OIP.png" alt="" class="w-12 h-12 mx-auto"></button>
+    <button class="choice bg-white px-6 py-3 rounded-xl shadow-md hover:bg-gray-100" data-choice="Scissors"><img src="./scissors.png" alt="" class="w-12 h-12 mx-auto"></button>
+  </div>
+
+  <div id="result" class="mt-8 text-xl font-mono p-4 bg-white rounded-lg shadow-md max-w-md text-center hidden"></div>
+
+  <script>
+    let win = 0;
+    let lose = 0;
+    let tie = 0;
+    let score = 0;
+
+    const scoreElement = document.getElementById('score');
+    const resultElement = document.getElementById('result');
+    const resetButton = document.getElementById('reset');
+    const choiceButtons = document.querySelectorAll('.choice');
+    const winElement = document.getElementById('win');
+    const loseElement = document.getElementById('lose');
+    const tieElement = document.getElementById('tie');
+
+    function getComputerMove() {
+      const number = Math.random();
+      if (number < 0.33) return 'Rock';
+      if (number < 0.66) return 'Paper';
+      return 'Scissors';
+    }
+
+    function determineWinner(playerMove, computerMove) {
+      if (playerMove === computerMove) return 'tie';
+      if (
+        (playerMove === 'Rock' && computerMove === 'Scissors') ||
+        (playerMove === 'Paper' && computerMove === 'Rock') ||
+        (playerMove === 'Scissors' && computerMove === 'Paper')
+      ) {
+        return 'win';
+      }
+      return 'lose';
+    }
+
+    function updateScore(outcome) {
+      if (outcome === 'win') {
+        score++;
+        win++;
+      } else if (outcome === 'lose') {
+        lose++;
+        score = Math.max(0, score - 1);
+      } else {
+        tie++;
+      }
+
+
+
+
+
+      // Update displayed values
+      scoreElement.textContent = score;
+      winElement.textContent = win;
+      loseElement.textContent = lose;
+      tieElement.textContent = tie;
+    }
+
+    function playGame(playerMove) {
+      const computerMove = getComputerMove();
+      const outcome = determineWinner(playerMove, computerMove);
+      updateScore(outcome);
+
+
+
+      // Show result
+      resultElement.classList.remove('hidden');
+      let resultText = `You chose ${playerMove}. Computer chose ${computerMove}. `;
+
+      if (outcome === 'win') {
+        resultText += "You win!";
+        resultElement.className = "mt-8 text-xl font-mono p-4 bg-green-100 rounded-lg shadow-md max-w-md text-center";
+      } else if (outcome === 'lose') {
+        resultText += "You lose!";
+        resultElement.className = "mt-8 text-xl font-mono p-4 bg-red-100 rounded-lg shadow-md max-w-md text-center";
+      } else {
+        resultText += "It's a tie!";
+        resultElement.className = "mt-8 text-xl font-mono p-4 bg-yellow-100 rounded-lg shadow-md max-w-md text-center";
+      }
+
+      resultElement.textContent = resultText;
+    }
+
+    choiceButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        playGame(button.dataset.choice);
+      });
+    });
+
+    resetButton.addEventListener('click', () => {
+      score = win = lose = tie = 0;
+      scoreElement.textContent = winElement.textContent = loseElement.textContent = tieElement.textContent = 0;
+      resultElement.classList.add('hidden');
+    });
+  </script>
+
+</body>
+</html>

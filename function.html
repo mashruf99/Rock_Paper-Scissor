@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>objects</title>
+</head>
+<body>
+    <h1>practice</h1>
+
+    <script>
+        const person = {
+            name: "John",
+            age: 30,
+            greet: function() {
+                console.log("Hello, my name is " + this.name);
+            }
+        };
+
+        person.name = "Jane"; // Update the name property   l
+        console.log(person);
+
+        person.newProperty = "New Value"; // Add a new property
+        console.log(person);
+
+
+
+
+
+
+    </script>
+    
+</body>
+</html>
